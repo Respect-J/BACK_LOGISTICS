@@ -42,8 +42,8 @@ admin.site.index_title = "Добро пожаловать в администр�
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('users.urls')),
-    path('banners/', include("main.urls")),
+    path('users/', include('apps.users.urls')),
+    path('main/', include("apps.main.urls")),
 
 
     re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
