@@ -1,9 +1,7 @@
 from django.urls import path
-
-from .views import UserListCreateView, UserRetrieveUpdateDestroyView
+from .views import RegisterUserView, ObtainTokenView
 
 urlpatterns = [
-    path("", UserListCreateView.as_view(), name="Contact-get-create"),
-    path("<pk>/", UserRetrieveUpdateDestroyView.as_view(), name="user-retrieve-update-destroy"),
-
+    path('register/', RegisterUserView.as_view(), name='register'),
+    path('token/', ObtainTokenView.as_view(), name='token'),
 ]
