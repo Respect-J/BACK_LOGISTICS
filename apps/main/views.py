@@ -2,7 +2,7 @@ from rest_framework import generics
 from .models import Banners, Docs, Contacts, TypeDelivery, Directions, DeliveryFromChina, Advantages
 from .serializers import BannersSerializer, DocsSerializer, ContactsSerializer, TypeDeliverySerializer, \
     DirectionsSerializer, DeliveryChinaSerializer, AdvantagesSerializer
-
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 class BannersView(generics.ListAPIView):
     queryset = Banners.objects.all()

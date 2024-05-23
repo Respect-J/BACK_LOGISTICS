@@ -1,19 +1,14 @@
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import AbstractUser
 from django.db import models
-from models import BaseModel
 
 
-class User(BaseModel):
-    username = models.CharField(max_length=256, null=True, blank=True)
-    mainimg = models.ImageField(upload_to="users/", null=True, blank=True)
-    password = models.CharField(max_length=256, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        self.password = make_password(self.password)
-        super().save(*args, **kwargs)
+class CustomUser(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('regular', 'Regular User'),
+        ('logistics', 'Logistics Manager'),
+        ('sales', 'Sales Manager'),
+    )
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='regular')
 
     def __str__(self):
         return self.username
-
-    def get_main_image_url(self):
-        return self.mainimg.url if self.mainimg else None

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     "rest_framework.authtoken",
+    'rest_framework_simplejwt',
     "corsheaders",
     "drf_yasg",
     'apps.users',
@@ -84,6 +85,14 @@ CORS_ALLOW_HEADERS = [
 
 
 ROOT_URLCONF = 'config.urls'
+
+AUTH_USER_MODEL = 'users.CustomUser'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 TEMPLATES = [
     {
