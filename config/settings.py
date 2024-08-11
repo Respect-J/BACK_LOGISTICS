@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     "corsheaders",
     "drf_yasg",
-    'apps.users',
     'apps.main'
 
 
@@ -86,13 +85,6 @@ CORS_ALLOW_HEADERS = [
 
 ROOT_URLCONF = 'config.urls'
 
-AUTH_USER_MODEL = 'users.CustomUser'
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
 
 TEMPLATES = [
     {
