@@ -59,7 +59,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://localhost:3001"]
+# CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://localhost:3001"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -160,6 +161,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-MEDIA_URL = "media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/home/legacyex/back-legacy-ex.com"
+MEDIA_ROOT = "/home/legacyex/back-legacy-ex.com/media/"
 
