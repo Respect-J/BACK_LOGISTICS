@@ -3,7 +3,7 @@ from .models import Request
 
 
 
-class CargoRequestSerializers(serializers.ModelSerializers):
+class CargoRequestSerializers(serializers.ModelSerializer):
     
     user = serializers.ReadOnlyField(source='user.username')  # Поле для отображения пользователя
     
@@ -19,9 +19,10 @@ class CargoRequestSerializers(serializers.ModelSerializers):
                   'manager_choice',
                   'user'
                   ]
+        read_only_fields = ['id','user']
 
 
-class SearchRequestSerializers(serializers.ModelSerializers):
+class SearchRequestSerializers(serializers.ModelSerializer):
     
     user = serializers.ReadOnlyField(source='user.username')  
     
@@ -41,9 +42,10 @@ class SearchRequestSerializers(serializers.ModelSerializers):
                   'manager_choice',
                   'user'
                   ]
+        read_only_fields = ['id','user']
         
         
-class SimpleRequestSerializers(serializers.ModelSerializers):
+class SimpleRequestSerializers(serializers.ModelSerializer):
     
     user = serializers.ReadOnlyField(source='user.username')  
     
@@ -60,3 +62,11 @@ class SimpleRequestSerializers(serializers.ModelSerializers):
                   'manager_chice',
                   'user'
                   ]
+        read_only_fields = ['id','user']
+        
+        def validate_request_type(self, value):
+            # Добавьте логи для отладки
+            print("Validating request_type:", value)
+            if value not in dict(self.Meta.model.REQUEST_TYPE_CHOICES):
+                raise serializers.ValidationError("Invalid request_type.")
+            return value

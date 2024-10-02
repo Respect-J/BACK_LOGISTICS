@@ -1,8 +1,9 @@
 from django.db import models
 from apps.users.models import User
-import uuid
+from models import BaseModel
 
-class Request(models.Model):
+
+class Request(BaseModel):
     
     CARGO = 'catgo'
     SIMPLE = 'simple'
@@ -14,13 +15,6 @@ class Request(models.Model):
         (SEARCH, 'Запрос на поиск')
         
     ]
-
-    #идентификатор для запроса
-    id = models.UUIDField( primary_key=True,
-                          default=uuid.uuid4,
-                          editable=False
-                          )
-
 
     #привязка заявки к пользователю
     user = models.ForeignKey( User,
@@ -42,13 +36,13 @@ class Request(models.Model):
     
     
     #тип запроса/заявки...
-    request_type = models.CharField( max_length=10,
+    request_type = models.CharField( max_length=16,
                                     choices= PEQUEST_TYPE_CHOICES,
-                                    default= SIMPLE
+                                    null=False
                                     )
     
     
-    #комментарий к запросу/заявке (карго/простая/)
+    #комментарий к запросу/заявке (карго/простая/поиск)
     comment = models.TextField( null=True,
                                blank=True
                                )
@@ -66,12 +60,6 @@ class Request(models.Model):
                                      null=True,
                                      blank=True
                                      )
-    
-    
-    #дата и время создания/обновления 
-    date_created = models.DateTimeField(auto_now_add=True)
-    
-    updated_at = models.DateTimeField(auto_now=True)
     
     
     #поиск товара по имени/названию

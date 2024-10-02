@@ -7,32 +7,25 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 
+
+
 class RequestDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]  # Требуется авторизация
     queryset = Request.objects.all()
+    lookup_field = 'id'
     
     
     def get_serializer_class(self):
-        request_type = self.request.query_params.get('request_type')  # Получаем тип из параметров запроса
+        request_type = self.request.data.get('request_type')  # Получаем тип из параметров запроса
+        
         if request_type == 'cargo':
             return CargoRequestSerializers
         elif request_type == 'simple':
             return SimpleRequestSerializers
         elif request_type == 'search':
             return SearchRequestSerializers
-        return None
-    
-    
-    def perform_create(self, serializer):
-        # Изменяем значение request_type перед сохранением
-        request_type = self.request.data.get('request_type')
-        if request_type in [CARGO, SIMPLE, SEARCH]:            # type: ignore
-            serializer.validated_data['request_type'] = request_type
-        else:
-            serializer.validated_data['request_type'] = SIMPLE # type: ignore # Значение по умолчанию или другое
         
-        # Сохраняем объект с указанным пользователем
-        serializer.save(user=self.request.user)
+        return SimpleRequestSerializers
     
     
     # POST обработка
@@ -44,7 +37,7 @@ class RequestDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer = serializer_class(data=request.data)
 
         if serializer.is_valid():
-            self.perform_create(serializer)
+            serializer.save(user=self.request.user)
             return Response({
                 "message": "Request created successfully.",
                 "data": serializer.data
@@ -55,14 +48,24 @@ class RequestDetailView(generics.RetrieveUpdateDestroyAPIView):
             "errors": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
         
+        
+        
     
     # GET обработка
     def get(self, request, *args, **kwargs):
-        # Получаем объект заявки по ID
-        request_instance = self.get_object()
-        serializer = self.get_serializer(request_instance)
-        
+        request_id = kwargs.get('pk', None)
+
+        if request_id is not None:
+            request_instance = get_object_or_404(Request, pk=request_id)
+            serializer = self.get_serializer(request_instance)
+            return Response(serializer.data)
+
+        queryset = self.get_queryset()
+        serializer_class = self.get_serializer_class() 
+        serializer = serializer_class(queryset, many=True)  # Создаем экземпляр сериализатора
         return Response(serializer.data)
+    
+    
     
     # PUT обработка
     def put(self, request, *args, **kwargs):
