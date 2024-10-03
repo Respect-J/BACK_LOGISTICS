@@ -64,9 +64,3 @@ class SimpleRequestSerializers(serializers.ModelSerializer):
                   ]
         read_only_fields = ['id','user']
         
-        def validate_request_type(self, value):
-            # Добавьте логи для отладки
-            print("Validating request_type:", value)
-            if value not in dict(self.Meta.model.REQUEST_TYPE_CHOICES):
-                raise serializers.ValidationError("Invalid request_type.")
-            return value

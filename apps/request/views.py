@@ -1,10 +1,11 @@
-from tkinter import SINGLE
 from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
 from .models import Request
 from .serializers import CargoRequestSerializers, SearchRequestSerializers, SimpleRequestSerializers
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from apps.users.models import User
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 
@@ -27,17 +28,29 @@ class RequestDetailView(generics.RetrieveUpdateDestroyAPIView):
         
         return SimpleRequestSerializers
     
+    def perform_create(self, serializer):
+        user = self.request.user
+        if not user.is_authenticated:
+            raise ValueError("User is not authenticated.")
+        if not isinstance(user, User):  # Замените на вашу модель пользователя
+            raise ValueError(f"Request.user must be a User instance.")
+        serializer.save(user=user)
     
     # POST обработка
     def post(self, request, *args, **kwargs):
+        
         serializer_class = self.get_serializer_class()
+        
         if not serializer_class:
             return Response({"error": "Invalid request type."}, status=status.HTTP_400_BAD_REQUEST)
 
+        if not request.user.is_authenticated:
+            return Response({"error": "User must be authenticated."}, status=status.HTTP_403_FORBIDDEN)
+        
         serializer = serializer_class(data=request.data)
 
         if serializer.is_valid():
-            serializer.save(user=self.request.user)
+            self.perform_create(serializer)
             return Response({
                 "message": "Request created successfully.",
                 "data": serializer.data

@@ -24,15 +24,23 @@ class Request(BaseModel):
     
     
     #имя клиента заявки
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255,
+                            null=False,
+                            blank=False
+                            )
     
     
     #контактный номер заявки
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20,
+                             null=False,
+                             blank=False
+                             )
     
     
     #контактный email заявки
-    email = models.EmailField()
+    email = models.EmailField(null=False,
+                              blank=False
+                              )
     
     
     #тип запроса/заявки...
@@ -43,7 +51,8 @@ class Request(BaseModel):
     
     
     #комментарий к запросу/заявке (карго/простая/поиск)
-    comment = models.TextField( null=True,
+    comment = models.TextField( max_length=1000,
+                               null=True,
                                blank=True
                                )
     
@@ -57,27 +66,28 @@ class Request(BaseModel):
     
     #выбор менеджера заявки (карго/простая/поиск)
     manager_chice = models.CharField( max_length=255,
-                                     null=True,
-                                     blank=True
-                                     )
+                                    null=False,
+                                    default="manager1"
+                                    )
     
     
     #поиск товара по имени/названию
-    search_item = models.TextField(null=True,
-                                   blank=True
+    search_item = models.TextField(null=False, 
+                                   default='search_item'
                                    )
     
     
     #желаемая цена за единицу (шт)
     desire_price = models.DecimalField( max_digits=10,
                                        decimal_places=2,
-                                       null=True,
-                                       blank=True
+                                       null=False,
+                                       default=0.0
                                        )
     
     
     #количество
-    quantity = models.IntegerField( null=True,
+    quantity = models.IntegerField( default=1,
+                                   null=True,
                                    blank=True
                                    )
     
@@ -89,16 +99,17 @@ class Request(BaseModel):
                                   )
     
     #дополнительная информация (карго/поиск)
-    additional_information = models.TextField( null=True,
+    additional_information = models.TextField(max_length=1000,
+                                              null=True,
                                               blank=True
                                               )
     
     
     #выбор услуши для простой заявки
     service_choice = models.CharField( max_length=255,
-                                     null=True,
-                                     blank=True
-                                     )
+                                    null=False,
+                                    default='default_service'
+                                    )
     
     
     
