@@ -11,6 +11,7 @@ class CargoRequestSerializers(serializers.ModelSerializer):
         model = Request
         fields = ['id',
                   'request_type',
+                  'status',
                   'name',
                   'phone',
                   'email',
@@ -21,7 +22,6 @@ class CargoRequestSerializers(serializers.ModelSerializer):
                   ]
         read_only_fields = ['id','user']
 
-
 class SearchRequestSerializers(serializers.ModelSerializer):
     
     user = serializers.ReadOnlyField(source='user.username')  
@@ -30,6 +30,7 @@ class SearchRequestSerializers(serializers.ModelSerializer):
         model = Request
         fields = ['id',
                   'request_type',
+                  'status',
                   'name',
                   'phone',
                   'email',
@@ -43,6 +44,7 @@ class SearchRequestSerializers(serializers.ModelSerializer):
                   'user'
                   ]
         read_only_fields = ['id','user']
+
         
         
 class SimpleRequestSerializers(serializers.ModelSerializer):
@@ -53,14 +55,16 @@ class SimpleRequestSerializers(serializers.ModelSerializer):
         model = Request
         fields = ['id',
                   'request_type',
+                  'status',
                   'name',
                   'phone',
                   'email',
                   'service_choice',
                   'comment',
                   'document',
-                  'manager_chice',
+                  'manager_choice',
                   'user'
                   ]
         read_only_fields = ['id','user']
+
         

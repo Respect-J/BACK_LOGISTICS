@@ -10,6 +10,7 @@ static/
 media/
 # Distribution / packaging
 .Python
+.DS_Store
 build/
 develop-eggs/
 dist/

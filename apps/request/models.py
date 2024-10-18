@@ -2,20 +2,33 @@ from django.db import models
 from apps.users.models import User
 from models import BaseModel
 
+class RequestType(models.TextChoices):
+    CARGO = 'cargo', 'Cargo Request'
+    SIMPLE = 'simple', 'Simple Request'
+    SEARCH = 'search', 'Search Request'
+
 
 class Request(BaseModel):
+
+
+    STATUS_NEW = 'new'
+    STATUS_IN_PROGRESS = 'in_progress'
+    STATUS_COMPLETED = 'completed'
+    STATUS_CANCELED = 'canceled'
     
-    CARGO = 'catgo'
-    SIMPLE = 'simple'
-    SEARCH = 'search'
-    
-    PEQUEST_TYPE_CHOICES = [
-        (CARGO, 'Запрос на карго'),
-        (SIMPLE, 'Простая заявка'),
-        (SEARCH, 'Запрос на поиск')
-        
+    REQUEST_STATUS_CHOICES = [
+        (STATUS_NEW, 'Новый'),
+        (STATUS_IN_PROGRESS, 'В процессе'),
+        (STATUS_COMPLETED, 'Завершен'),
+        (STATUS_CANCELED, 'Отклонен')
     ]
 
+    status = models.CharField(
+        max_length=20,
+        choices=REQUEST_STATUS_CHOICES,
+        default=STATUS_NEW,
+    )
+    
     #привязка заявки к пользователю
     user = models.ForeignKey( User,
                              on_delete=models.CASCADE,
@@ -45,8 +58,9 @@ class Request(BaseModel):
     
     #тип запроса/заявки...
     request_type = models.CharField( max_length=16,
-                                    choices= PEQUEST_TYPE_CHOICES,
-                                    null=False
+                                    choices=RequestType.choices,
+                                    null=False,
+                                    blank=False
                                     )
     
     
@@ -65,15 +79,15 @@ class Request(BaseModel):
     
     
     #выбор менеджера заявки (карго/простая/поиск)
-    manager_chice = models.CharField( max_length=255,
+    manager_choice = models.CharField( max_length=255,
                                     null=False,
-                                    default="manager1"
+                                    blank=False
                                     )
     
     
     #поиск товара по имени/названию
-    search_item = models.TextField(null=False, 
-                                   default='search_item'
+    search_item = models.TextField(null=False,
+                                   blank=False,
                                    )
     
     
@@ -88,7 +102,6 @@ class Request(BaseModel):
     #количество
     quantity = models.IntegerField( default=1,
                                    null=True,
-                                   blank=True
                                    )
     
     
@@ -97,18 +110,12 @@ class Request(BaseModel):
                                   blank=True,
                                   null=True
                                   )
-    
-    #дополнительная информация (карго/поиск)
-    additional_information = models.TextField(max_length=1000,
-                                              null=True,
-                                              blank=True
-                                              )
-    
+
     
     #выбор услуши для простой заявки
     service_choice = models.CharField( max_length=255,
                                     null=False,
-                                    default='default_service'
+                                    blank=False
                                     )
     
     
