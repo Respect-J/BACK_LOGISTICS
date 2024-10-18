@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     "corsheaders",
     "drf_yasg",
     'apps.main',
-    'apps.users'
+    'apps.users',
+    'apps.request',
+    
 
 
 ]
@@ -60,6 +62,31 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+
+from datetime import timedelta
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30), 
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    
+    'ROTATE_REFRESH_TOKENS': True,                   
+    'BLACKLIST_AFTER_ROTATION': True,                  
+    'ALGORITHM': 'HS256',                            
+    'SIGNING_KEY': SECRET_KEY,                        
+    'VERIFYING_KEY': None,                           
+    'AUTH_HEADER_TYPES': ('Bearer',),                 
+}
+
+AUTH_USER_MODEL = 'users.User'
+
 
 # CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:5173", "http://localhost:3001"]
 CORS_ALLOW_ALL_ORIGINS = True

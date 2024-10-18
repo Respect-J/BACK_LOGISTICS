@@ -44,6 +44,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('main/', include("apps.main.urls")),
     path('users/', include('apps.users.urls')),
+    path('request/', include('apps.request.urls')),
 
 
     re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
