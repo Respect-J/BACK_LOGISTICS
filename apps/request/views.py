@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from django.shortcuts import get_object_or_404
 from .models import Request
 from .serializers import CargoRequestSerializers, SearchRequestSerializers, SimpleRequestSerializers
@@ -15,7 +15,8 @@ from drf_yasg import openapi
 
 
 
-class RequestDetailView(viewsets.GenericViewSet):
+class RequestDetailView(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    
     permission_classes = [IsAuthenticated]  # Требуется авторизация
     queryset = Request.objects.all()
     lookup_field = 'id'
@@ -56,7 +57,7 @@ class RequestDetailView(viewsets.GenericViewSet):
             return serializer_class
 
         
-        raise ValidationError(f"Unknown request type: {request_type}")
+        raise ValidationError(f"Неизвестный тип запроса: {request_type}. Доступные типы: {', '.join(serializers_map.keys())}")
     
     
     def get_object(self):
@@ -89,9 +90,6 @@ class RequestDetailView(viewsets.GenericViewSet):
         
         if not serializer_class:
             return Response({"error": "Invalid request type."}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not request.user.is_authenticated:
-            return Response({"error": "User must be authenticated."}, status=status.HTTP_403_FORBIDDEN)
         
         serializer = serializer_class(data=request.data)
 
