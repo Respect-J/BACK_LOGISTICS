@@ -2,6 +2,12 @@ from django.urls import path
 from .views import RequestDetailView
 
 urlpatterns = [
-    path('requests/', RequestDetailView.as_view(), name='request-list_post'), # получить список запросов c задаными фильтрациями + POST обработка
-    path('requests/<uuid:id>/', RequestDetailView.as_view(), name='request-detail'),  # GET(получить конкретного пользователя), PUT, PATCH, DELETE для обновления
+
+    path('request_filter_post/', 
+         RequestDetailView.as_view({'post': 'create', 'get': 'list'}), 
+         name='request-filter_post'), #фильтрации по датам и статусу + POST обработка
+
+    path('requests/<uuid:pk>/', 
+         RequestDetailView.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), 
+         name='request-detail')  # методы GET, PUT, PATCH, DELETE с указанием ID
 ]
