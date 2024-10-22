@@ -3,30 +3,30 @@ from apps.users.models import User
 from models import BaseModel
 
 class RequestType(models.TextChoices):
-    CARGO = 'cargo', 'Cargo Request'
-    SIMPLE = 'simple', 'Simple Request'
-    SEARCH = 'search', 'Search Request'
+    CARGO = 'cargo', 'Запрос на карго'
+    SIMPLE = 'simple', 'Простая заявка'
+    SEARCH = 'search', 'Запрос на поиск'
+    
+class ManagerChice(models.TextChoices):
+    SALESPERSON = 'salesperson', 'Продавец'
+    LOGISTICIAN = 'logistician', 'Логист'
+    
+class StatusChoice(models.TextChoices):
+    STATUS_NEW = 'new', 'Новый'
+    STATUS_IN_PROGRESS = 'in_progress', 'В процессе'
+    STATUS_COMPLETED = 'completed', 'Завершен'
+    STATUS_CANCELED = 'canceled', 'Отклонен'
+    
+class ServisChoice(models.TextChoices):
+    DELIVERY_FROM_CHINA = 'deliveryfromchina', 'Доставка из китая'
 
 
 class Request(BaseModel):
 
-
-    STATUS_NEW = 'new'
-    STATUS_IN_PROGRESS = 'in_progress'
-    STATUS_COMPLETED = 'completed'
-    STATUS_CANCELED = 'canceled'
-    
-    REQUEST_STATUS_CHOICES = [
-        (STATUS_NEW, 'Новый'),
-        (STATUS_IN_PROGRESS, 'В процессе'),
-        (STATUS_COMPLETED, 'Завершен'),
-        (STATUS_CANCELED, 'Отклонен')
-    ]
-
     status = models.CharField(
         max_length=20,
-        choices=REQUEST_STATUS_CHOICES,
-        default=STATUS_NEW,
+        choices=StatusChoice.choices,
+        default=StatusChoice.STATUS_NEW,
     )
     
     #привязка заявки к пользователю
@@ -80,6 +80,7 @@ class Request(BaseModel):
     
     #выбор менеджера заявки (карго/простая/поиск)
     manager_choice = models.CharField( max_length=255,
+                                    choices=ManagerChice.choices,
                                     null=False,
                                     blank=False
                                     )
@@ -114,6 +115,7 @@ class Request(BaseModel):
     
     #выбор услуши для простой заявки
     service_choice = models.CharField( max_length=255,
+                                      choices=ServisChoice.choices,
                                     null=False,
                                     blank=False
                                     )
