@@ -16,6 +16,10 @@ class User(AbstractUser):
     # Замена стандартного автоинкрементного ID на собственное поле
     id = models.CharField(max_length=6, unique=True, primary_key=True, editable=False)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=CLIENT)
+    email = models.EmailField(unique=True)
+
+    last_name = models.CharField(max_length=150, blank=True)
+    verification_code = models.CharField(max_length=5, blank=True, null=True)  # Поле для кода
 
     groups = models.ManyToManyField(
         Group,
