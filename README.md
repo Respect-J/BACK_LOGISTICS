@@ -1,7 +1,3 @@
-Вот пример содержания для файла `README.md`, описывающего функциональность проекта с учетом внесенных изменений:
-
----
-
 # Legacy Authentication and User Management
 
 ## Overview
