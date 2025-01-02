@@ -117,10 +117,4 @@ This project implements a comprehensive user authentication and management syste
 
 ---
 
-## Contributions
 
-Contributions are welcome! Feel free to open issues or submit pull requests.
-
----
-
-Этот README дает полное представление о проекте и его функциональности, включая API, инструкции по установке и описания ключевых возможностей. Если требуется что-то добавить или изменить, дайте знать!
